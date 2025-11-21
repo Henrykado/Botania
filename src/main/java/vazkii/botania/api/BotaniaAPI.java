@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -29,7 +30,10 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.stats.Achievement;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.IWorldAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import vazkii.botania.api.brew.Brew;
@@ -57,6 +61,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 import cpw.mods.fml.common.Loader;
+import vazkii.botania.common.achievement.ModAchievements;
 
 public final class BotaniaAPI {
 
@@ -111,6 +116,8 @@ public final class BotaniaAPI {
 	// This is here for completeness’s sake, but you shouldn't use it
 	public static KnowledgeType relicKnowledge;
 
+	public static KnowledgeType runicKnowledge;
+
 	// All of these categories are initialized during botania's PreInit stage.
 	public static LexiconCategory categoryBasics;
 	public static LexiconCategory categoryMana;
@@ -131,6 +138,7 @@ public final class BotaniaAPI {
 		basicKnowledge = registerKnowledgeType("minecraft", EnumChatFormatting.RESET, true);
 		elvenKnowledge = registerKnowledgeType("alfheim", EnumChatFormatting.DARK_GREEN, false);
 		relicKnowledge = registerKnowledgeType("relic", EnumChatFormatting.DARK_PURPLE, false);
+		runicKnowledge = registerKnowledgeType("runic", EnumChatFormatting.DARK_BLUE, false);
 
 		addOreWeight("oreAluminum", 3940); // Tinkers' Construct
 		addOreWeight("oreAmber", 2075); // Thaumcraft
@@ -675,4 +683,8 @@ public final class BotaniaAPI {
 		return "bm_" + block.getUnlocalizedName() + "@" + meta;
 	}
 
+
+	public static boolean hasAchievementUnlocked(Achievement achievement) {
+		return Minecraft.getMinecraft().thePlayer.getStatFileWriter().hasAchievementUnlocked(achievement);
+	}
 }

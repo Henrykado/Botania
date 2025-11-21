@@ -108,11 +108,11 @@ public class TileEnchanter extends TileMod implements ISparkAttachable {
 		for(int[] p : PYLON_LOCATIONS[0]) {
 			mb.addComponent(p[0], p[1] + 1, p[2], ModBlocks.pylon, 0);
 
-			extraDisplayList.add(new MultiblockComponent(
+			/*extraDisplayList.add(new MultiblockComponent(
 					new ChunkCoordinates(p[0], p[1], p[2]),
 					physicsDefyingFlower,
 					0
-			));
+			));*/
 			extraDisplayList.add(new MultiblockComponent(
 					new ChunkCoordinates(p[0], p[1] - 1, p[2]),
 					Blocks.grass,
@@ -141,12 +141,12 @@ public class TileEnchanter extends TileMod implements ISparkAttachable {
 		);
 
 		//Add the actual flowers
-		for(int[] p : PYLON_LOCATIONS[0]) {
+		/*for(int[] p : PYLON_LOCATIONS[0]) {
 			mb.addComponent(new FlowerComponent(
 					new ChunkCoordinates(p[0], p[1], p[2]),
 					ModBlocks.flower
 			));
-		}
+		}*/
 		for(int[] f : FLOWER_LOCATIONS) {
 			mb.addComponent(new FlowerComponent(
 					new ChunkCoordinates(f[0], f[1] + 1, f[2]),

@@ -47,6 +47,7 @@ import vazkii.botania.common.item.rod.ItemWaterRod;
 import vazkii.botania.common.lexicon.LexiconData;
 import vazkii.botania.common.lib.LibBlockNames;
 import cpw.mods.fml.common.registry.GameRegistry;
+import vazkii.botania.common.world.WorldTypeSkyblock;
 
 public class BlockAltar extends BlockModContainer<TileAltar> implements ILexiconable {
 
@@ -145,7 +146,7 @@ public class BlockAltar extends BlockModContainer<TileAltar> implements ILexicon
 				world.func_147453_f(x, y, z, this);
 
 				return true;
-			} else if(stack != null && stack.getItem() == Items.bucket && (tile.hasWater || tile.hasLava) && !Botania.gardenOfGlassLoaded) {
+			} else if(stack != null && stack.getItem() == Items.bucket && (tile.hasWater || tile.hasLava) && !WorldTypeSkyblock.isWorldSkyblock(par1World)) {
 				ItemStack bucket = tile.hasLava ? new ItemStack(Items.lava_bucket) : new ItemStack(Items.water_bucket);
 				if(stack.stackSize == 1)
 					player.inventory.setInventorySlotContents(player.inventory.currentItem, bucket);

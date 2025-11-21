@@ -2394,7 +2394,7 @@ botania.entry.hopperhock=Hopperhock
 botania.tagline.hopperhock=Coleta itens
 botania.page.hopperhock0=A &1Hopperhock&0 coleta itens ao seu redor. Usar &4Mana&0 é opcional, mas aumenta seu alcance.<br>Itens coloetados são colocados em um inventário adjacente(ex.: &1Baús&0). Pendurando uma &1Moldura&0 no inventário, pode-se especificar que itens podem ou não podem ser coletados.
 botania.page.hopperhock1=Qualquer inventário sem &1Moldura&0 adjacente aceita qualquer item, mas invetários rotulados possuem prioridade.<br>A regra usada para organizar pode ser mudada com shift-clique direito na flor com uma &1Varinha da Floresta&0.
-botania.page.hopperhock2=&oI guess I'll be talking my loli and leaving&r.
+botania.page.hopperhock2=&oIt all funnels into it&r.
 
 # -- TANGLEBERRIE
 botania.entry.tangleberrie=Tangleberrie

@@ -11,7 +11,9 @@
 package vazkii.botania.common.world;
 
 import java.awt.Color;
+import java.util.List;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +21,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MovingObjectPosition;
@@ -27,11 +32,32 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
+import vazkii.botania.api.BotaniaAPI;
+import vazkii.botania.api.lexicon.LexiconCategory;
+import vazkii.botania.api.lexicon.LexiconEntry;
+import vazkii.botania.api.recipe.RecipePetals;
+import vazkii.botania.common.Botania;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.block.tile.TileManaFlame;
+import vazkii.botania.common.crafting.ModCraftingRecipes;
+import vazkii.botania.common.crafting.ModManaInfusionRecipes;
+import vazkii.botania.common.crafting.ModPetalRecipes;
 import vazkii.botania.common.item.ModItems;
+import vazkii.botania.common.item.block.ItemBlockSpecialFlower;
 import vazkii.botania.common.item.equipment.tool.ToolCommons;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import vazkii.botania.common.lexicon.ALexiconEntry;
+import vazkii.botania.common.lexicon.BLexiconEntry;
+import vazkii.botania.common.lexicon.LexiconData;
+import vazkii.botania.common.lexicon.page.PageCraftingRecipe;
+import vazkii.botania.common.lexicon.page.PageManaInfusionRecipe;
+import vazkii.botania.common.lexicon.page.PagePetalRecipe;
+import vazkii.botania.common.lexicon.page.PageText;
+import vazkii.botania.common.lib.LibBlockNames;
+import vazkii.botania.common.lib.LibLexicon;
+import vazkii.botania.common.lib.LibOreDict;
 
 public final class SkyblockWorldEvents {
 
@@ -43,23 +69,27 @@ public final class SkyblockWorldEvents {
 
 	@SubscribeEvent
 	public void onPlayerUpdate(LivingUpdateEvent event) {
-		if(event.entityLiving instanceof EntityPlayer && !event.entity.worldObj.isRemote) {
+		if(event.entityLiving instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) event.entityLiving;
-			NBTTagCompound data = player.getEntityData();
-			if(!data.hasKey(EntityPlayer.PERSISTED_NBT_TAG))
-				data.setTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
+			if (player.ticksExisted == 2) {
+				updateSkyblockRecipes(WorldTypeSkyblock.isWorldSkyblock(player.worldObj));
+			}
+			if (!event.entity.worldObj.isRemote) {
+				NBTTagCompound data = player.getEntityData();
+				if (!data.hasKey(EntityPlayer.PERSISTED_NBT_TAG))
+					data.setTag(EntityPlayer.PERSISTED_NBT_TAG, new NBTTagCompound());
 
-			NBTTagCompound persist = data.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
-			if(player.ticksExisted > 3 && !persist.getBoolean(TAG_MADE_ISLAND)) {
-				World world = player.worldObj;
-				if(WorldTypeSkyblock.isWorldSkyblock(world)) {
-					ChunkCoordinates coords = world.getSpawnPoint();
-					if(world.getBlock(coords.posX, coords.posY - 4, coords.posZ) != Blocks.bedrock && world.provider.dimensionId == 0)
-						spawnPlayer(player, coords.posX, coords.posY, coords.posZ, false);
+				NBTTagCompound persist = data.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+				if (player.ticksExisted > 3 && !persist.getBoolean(TAG_MADE_ISLAND)) {
+					World world = player.worldObj;
+					if (WorldTypeSkyblock.isWorldSkyblock(world)) {
+						ChunkCoordinates coords = world.getSpawnPoint();
+						if (world.getBlock(coords.posX, coords.posY - 4, coords.posZ) != Blocks.bedrock && world.provider.dimensionId == 0)
+							spawnPlayer(player, coords.posX, coords.posY, coords.posZ, false);
+					}
+
+					persist.setBoolean(TAG_MADE_ISLAND, true);
 				}
-
-
-				persist.setBoolean(TAG_MADE_ISLAND, true);
 			}
 		}
 	}
@@ -115,6 +145,164 @@ public final class SkyblockWorldEvents {
 				event.drops.remove(stackToRemove);
 				event.drops.add(new ItemStack(event.world.rand.nextBoolean() ? Items.pumpkin_seeds : Items.melon_seeds));
 			}
+		}
+	}
+
+
+	public static void addShapelessOreDictRecipe(ItemStack output, Object... recipe) {
+		CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(output, recipe));
+	}
+	public static void addShapedOreDictRecipe(ItemStack output, Object... recipe) {
+		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(output, recipe));
+	}
+
+	public static void removeRecipe(IRecipe recipe) {
+		if (recipe != null) CraftingManager.getInstance().getRecipeList().remove(recipe);
+	}
+	public static void removePetalRecipe(RecipePetals recipe) {
+		if (recipe != null) BotaniaAPI.petalRecipes.remove(recipe);
+	}
+	public static void removeRecipes(List<IRecipe> recipe) {
+		if (recipe != null) CraftingManager.getInstance().getRecipeList().removeAll(recipe);
+	}
+	public static void removeEntry(LexiconEntry entry) {
+		if (entry != null) {
+			BotaniaAPI.getAllEntries().remove(entry);
+			entry.category.entries.remove(entry);
+		}
+	}
+
+	public static void updateSkyblockRecipes(boolean isWorldSkyblock) {
+		removeRecipe(ModCraftingRecipes.recipeFertilizerPowder);
+		removeRecipe(ModCraftingRecipes.recipeCocoon);
+		removeRecipe(ModCraftingRecipes.recipeBlazeBlock);
+		removeRecipe(ModCraftingRecipes.recipeFromBlazeBlock);
+		removeRecipe(ModCraftingRecipes.recipeMagmaToSlimeball);
+		removeRecipe(ModCraftingRecipes.recipeEndPortal);
+		removeRecipes(ModCraftingRecipes.recipesSpreader);
+
+		removePetalRecipe(ModPetalRecipes.orechidRecipe);
+		if (ModManaInfusionRecipes.sugarCaneRecipe != null)
+			BotaniaAPI.manaInfusionRecipes.remove(ModManaInfusionRecipes.sugarCaneRecipe);
+
+		removeEntry(LexiconData.gardenOfGlass);
+		removeEntry(LexiconData.orechid);
+		removeEntry(LexiconData.cocoon);
+
+
+		if (isWorldSkyblock) {
+			// Mana Spreader
+			for (int i = 0; i < 16; i++) {
+				CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(
+						new ItemStack(ModBlocks.spreader), "WWW", "GP ", "WWW",
+						'W', LibOreDict.LIVING_WOOD,
+						'P', LibOreDict.PETAL[i],
+						'G', LibOreDict.LIVING_WOOD));
+			}
+			ModCraftingRecipes.recipesSpreader = BotaniaAPI.getLatestAddedRecipes(16);
+
+			// Floral Fertilizer
+			CraftingManager.getInstance().addShapelessRecipe(new ItemStack(ModItems.fertilizer, 3), new ItemStack(Items.dye, 1, 15), new ItemStack(ModItems.dye, 1, Short.MAX_VALUE), new ItemStack(ModItems.dye, 1, Short.MAX_VALUE), new ItemStack(ModItems.dye, 1, Short.MAX_VALUE), new ItemStack(ModItems.dye, 1, Short.MAX_VALUE));
+			ModCraftingRecipes.recipeFertilizerPowder = BotaniaAPI.getLatestAddedRecipe();
+
+			// Cocoon of Caprice
+			addShapedOreDictRecipe(new ItemStack(ModBlocks.cocoon),
+					"SSS", "SFS", "SIS",
+					'S', new ItemStack(Items.string),
+					'F', new ItemStack(ModBlocks.felPumpkin),
+					'I', LibOreDict.MANA_STEEL);
+			ModCraftingRecipes.recipeCocoon = BotaniaAPI.getLatestAddedRecipe();
+
+			// Blaze Light
+			addShapedOreDictRecipe(new ItemStack(ModBlocks.blazeBlock),
+					"BBB", "BBB", "BBB",
+					'B', "powderBlaze"); //"rodBlaze"
+			ModCraftingRecipes.recipeBlazeBlock = BotaniaAPI.getLatestAddedRecipe();
+
+			addShapelessOreDictRecipe(new ItemStack(Items.blaze_powder, 9), LibOreDict.BLAZE_BLOCK); //Items.blaze_rod
+			ModCraftingRecipes.recipeFromBlazeBlock = BotaniaAPI.getLatestAddedRecipe();
+
+			// Orechid
+			ModPetalRecipes.orechidRecipe = BotaniaAPI.registerPetalRecipe(ItemBlockSpecialFlower.ofType(LibBlockNames.SUBTILE_ORECHID), ModPetalRecipes.gray, ModPetalRecipes.gray, ModPetalRecipes.yellow, ModPetalRecipes.yellow, ModPetalRecipes.green, ModPetalRecipes.green, ModPetalRecipes.red, ModPetalRecipes.red);
+
+
+			// Magma Pearl to Slimeball
+			addShapelessOreDictRecipe(new ItemStack(Items.slime_ball), new ItemStack(Items.magma_cream), new ItemStack(Items.water_bucket));
+			ModCraftingRecipes.recipeMagmaToSlimeball = BotaniaAPI.getLatestAddedRecipe();
+
+			// Ender Portal
+			addShapedOreDictRecipe(new ItemStack(Blocks.end_portal_frame),
+					"OGO",
+					'O', new ItemStack(Blocks.obsidian),
+					'G', LibOreDict.LIFE_ESSENCE);
+			ModCraftingRecipes.recipeEndPortal = BotaniaAPI.getLatestAddedRecipe();
+
+			ModManaInfusionRecipes.sugarCaneRecipe = BotaniaAPI.registerManaInfusionRecipe(new ItemStack(Items.reeds), new ItemStack(Blocks.hay_block), 2000);
+
+
+			LexiconData.gardenOfGlass = new BLexiconEntry(LibLexicon.BASICS_GARDEN_OF_GLASS, BotaniaAPI.categoryBasics);
+			LexiconData.gardenOfGlass.setLexiconPages(new PageText("0"), new PageText("1"), new PageText("2"),
+					new PageCraftingRecipe("3", ModCraftingRecipes.recipeRootToSapling),
+					new PageCraftingRecipe("4", ModCraftingRecipes.recipeRootToFertilizer),
+					new PageCraftingRecipe("5", ModCraftingRecipes.recipePebbleCobblestone), new PageText("6"),
+					new PageManaInfusionRecipe("7", ModManaInfusionRecipes.sugarCaneRecipe),
+					new PageCraftingRecipe("8", ModCraftingRecipes.recipeMagmaToSlimeball), new PageText("9"),
+					new PageText("11"), new PageCraftingRecipe("12", ModCraftingRecipes.recipeEndPortal));
+			LexiconData.gardenOfGlass.setPriority().setIcon(new ItemStack(ModItems.manaResource, 1, 20));
+
+			LexiconData.orechid = new BLexiconEntry(LibLexicon.FFLOWER_ORECHID, BotaniaAPI.categoryFunctionalFlowers);
+			LexiconData.orechid.setLexiconPages(new PageText("0"), new PagePetalRecipe<>("1", ModPetalRecipes.orechidRecipe));
+			LexiconData.orechid.setPriority();
+
+			LexiconData.cocoon = new BLexiconEntry(LibLexicon.DEVICE_COCOON, BotaniaAPI.categoryDevices);
+			LexiconData.cocoon.setLexiconPages(new PageText("0"), new PageText("1"),
+					new PageCraftingRecipe("2", ModCraftingRecipes.recipeCocoon));
+		}
+		else {
+			// Mana Spreader
+			for (int i = 0; i < 16; i++) {
+				CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(
+						new ItemStack(ModBlocks.spreader),
+						"WWW", "GP ", "WWW",
+						'W', LibOreDict.LIVING_WOOD,
+						'P', LibOreDict.PETAL[i],
+						'G', "ingotGold"));
+			}
+			ModCraftingRecipes.recipesSpreader = BotaniaAPI.getLatestAddedRecipes(16);
+
+			// Floral Fertilizer
+			CraftingManager.getInstance().addShapelessRecipe(new ItemStack(ModItems.fertilizer, 1), new ItemStack(Items.dye, 1, 15), new ItemStack(ModItems.dye, 1, Short.MAX_VALUE), new ItemStack(ModItems.dye, 1, Short.MAX_VALUE), new ItemStack(ModItems.dye, 1, Short.MAX_VALUE), new ItemStack(ModItems.dye, 1, Short.MAX_VALUE));
+			ModCraftingRecipes.recipeFertilizerPowder = BotaniaAPI.getLatestAddedRecipe();
+
+			// Cocoon of Caprice
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(ModBlocks.cocoon),
+					"SSS", "SPS", "SDS",
+					'S', new ItemStack(Items.string),
+					'P', LibOreDict.PIXIE_DUST,
+					'D', LibOreDict.DRAGONSTONE));
+			ModCraftingRecipes.recipeCocoon = BotaniaAPI.getLatestAddedRecipe();
+
+			// Blaze Light
+			CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(ModBlocks.blazeBlock),
+					"BBB", "BBB", "BBB",
+					'B', "powderBlaze")); //"rodBlaze"
+			ModCraftingRecipes.recipeBlazeBlock = BotaniaAPI.getLatestAddedRecipe();
+
+			CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(new ItemStack(Items.blaze_powder, 9), LibOreDict.BLAZE_BLOCK)); //Items.blaze_rod
+			ModCraftingRecipes.recipeFromBlazeBlock = BotaniaAPI.getLatestAddedRecipe();
+
+			// Orechid
+			ModPetalRecipes.orechidRecipe = BotaniaAPI.registerPetalRecipe(ItemBlockSpecialFlower.ofType(LibBlockNames.SUBTILE_ORECHID), ModPetalRecipes.gray, ModPetalRecipes.gray, ModPetalRecipes.yellow, ModPetalRecipes.green, ModPetalRecipes.red, ModPetalRecipes.runePride, ModPetalRecipes.runeGreed, ModPetalRecipes.redstoneRoot, ModPetalRecipes.pixieDust);
+
+
+			LexiconData.gardenOfGlass = null;
+
+			LexiconData.orechid = new ALexiconEntry(LibLexicon.FFLOWER_ORECHID, BotaniaAPI.categoryFunctionalFlowers);
+			LexiconData.orechid.setLexiconPages(new PageText("0"), new PagePetalRecipe<>("1", ModPetalRecipes.orechidRecipe));
+
+			LexiconData.cocoon = new ALexiconEntry(LibLexicon.DEVICE_COCOON, BotaniaAPI.categoryDevices);
+			LexiconData.cocoon.setLexiconPages(new PageText("0"), new PageText("1"),
+					new PageCraftingRecipe("2", ModCraftingRecipes.recipeCocoon));
 		}
 	}
 	

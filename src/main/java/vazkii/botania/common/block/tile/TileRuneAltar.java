@@ -30,6 +30,7 @@ import org.lwjgl.opengl.GL12;
 
 import vazkii.botania.api.BotaniaAPI;
 import vazkii.botania.api.internal.VanillaPacketDispatcher;
+import vazkii.botania.api.lexicon.ILexicon;
 import vazkii.botania.api.mana.IManaReceiver;
 import vazkii.botania.api.recipe.RecipeRuneAltar;
 import vazkii.botania.client.core.handler.HUDHandler;
@@ -113,6 +114,18 @@ public class TileRuneAltar extends TileSimpleInventory implements ISidedInventor
 			List<EntityItem> items = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1, yCoord + 1, zCoord + 1));
 			for(EntityItem item : items)
 				if(!item.isDead && item.getEntityItem() != null && item.getEntityItem().getItem() != Item.getItemFromBlock(ModBlocks.livingrock)) {
+					if (item.getEntityItem().getItem() instanceof ILexicon) {
+						if (!((ILexicon)item.getEntityItem().getItem()).isKnowledgeUnlocked(item.getEntityItem(), BotaniaAPI.runicKnowledge)) {
+							((ILexicon) item.getEntityItem().getItem()).unlockKnowledge(item.getEntityItem(), BotaniaAPI.runicKnowledge);
+						}
+						else if (worldObj.isRemote && worldObj.rand.nextInt(20) == 0) {
+							Vector3 vec = Vector3.fromTileEntityCenter(this);
+							Vector3 endVec = vec.copy().add(0, 2.5, 0);
+							Botania.proxy.lightningFX(worldObj, vec, endVec, 2F, 0x00948B, 0x00E4D7);
+						}
+						return;
+					}
+
 					ItemStack stack = item.getEntityItem();
 					if(addItem(null, stack) && stack.stackSize == 0)
 						item.setDead();

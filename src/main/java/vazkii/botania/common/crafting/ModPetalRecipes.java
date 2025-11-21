@@ -103,10 +103,6 @@ public final class ModPetalRecipes {
 		heiseiDreamRecipe = BotaniaAPI.registerPetalRecipe(ItemBlockSpecialFlower.ofType(LibBlockNames.SUBTILE_HEISEI_DREAM), magenta, magenta, purple, pink, runeWrath, pixieDust);
 		tigerseyeRecipe = BotaniaAPI.registerPetalRecipe(ItemBlockSpecialFlower.ofType(LibBlockNames.SUBTILE_TIGERSEYE), yellow, brown, orange, lime, runeAutumn);
 
-		if(Botania.gardenOfGlassLoaded)
-			orechidRecipe = BotaniaAPI.registerPetalRecipe(ItemBlockSpecialFlower.ofType(LibBlockNames.SUBTILE_ORECHID), gray, gray, yellow, yellow, green, green, red, red);
-		else orechidRecipe = BotaniaAPI.registerPetalRecipe(ItemBlockSpecialFlower.ofType(LibBlockNames.SUBTILE_ORECHID), gray, gray, yellow, green, red, runePride, runeGreed, redstoneRoot, pixieDust);
-
 		orechidIgnemRecipe = BotaniaAPI.registerPetalRecipe(ItemBlockSpecialFlower.ofType(LibBlockNames.SUBTILE_ORECHID_IGNEM), red, red, white, white, pink, runePride, runeGreed, redstoneRoot, pixieDust);
 		if(ConfigHandler.fallenKanadeEnabled)
 			fallenKanadeRecipe = BotaniaAPI.registerPetalRecipe(ItemBlockSpecialFlower.ofType(LibBlockNames.SUBTILE_FALLEN_KANADE), white, white, yellow, yellow, orange, runeSpring);

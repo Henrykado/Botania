@@ -11,6 +11,7 @@
 package vazkii.botania.common.block.decor;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -25,6 +26,7 @@ import vazkii.botania.common.lexicon.LexiconData;
 import vazkii.botania.common.lib.LibBlockNames;
 import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+import vazkii.botania.common.world.WorldTypeSkyblock;
 
 public class BlockBlaze extends BlockMod implements ILexiconable, IFuelHandler {
 
@@ -45,7 +47,7 @@ public class BlockBlaze extends BlockMod implements ILexiconable, IFuelHandler {
 
 	@Override
 	public int getBurnTime(ItemStack fuel) {
-		return fuel.getItem() == Item.getItemFromBlock(this) ? TileEntityFurnace.getItemBurnTime(new ItemStack(Items.blaze_rod)) * (Botania.gardenOfGlassLoaded ? 5 : 10) : 0;
+		return fuel.getItem() == Item.getItemFromBlock(this) ? TileEntityFurnace.getItemBurnTime(new ItemStack(Items.blaze_rod)) * (WorldTypeSkyblock.isWorldSkyblock(Minecraft.getMinecraft().theWorld) ? 5 : 10) : 0;
 	}
 
 }

@@ -12,6 +12,7 @@ package vazkii.botania.common.item.equipment.tool.manasteel;
 
 import java.util.regex.Pattern;
 
+import com.gildedgames.the_aether.AetherConfig;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
@@ -86,6 +87,8 @@ public class ItemManasteelPick extends ItemPickaxe implements IManaUsingItem, IS
 
 	@Override
 	public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float subX, float subY, float subZ) {
+		if (player.dimension == AetherConfig.getAetherDimensionID()) return false;
+
 		for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
 			ItemStack stackAt = player.inventory.getStackInSlot(i);
 			if(stackAt != null && TORCH_PATTERN.matcher(stackAt.getItem().getUnlocalizedName()).find()) {

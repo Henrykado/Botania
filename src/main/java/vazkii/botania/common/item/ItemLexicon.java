@@ -13,7 +13,9 @@ package vazkii.botania.common.item;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -151,6 +153,10 @@ public class ItemLexicon extends ItemMod implements ILexicon, IElvenItem {
 					break;
 				}
 			}
+		/*if(!l.isKnowledgeUnlocked(stack, BotaniaAPI.runicKnowledge) && BotaniaAPI.hasAchievementUnlocked(ModAchievements.runePickup))
+		{
+			l.unlockKnowledge(stack, BotaniaAPI.runicKnowledge);
+		}*/
 
 		Botania.proxy.setLexiconStack(stack);
 		player.addStat(ModAchievements.lexiconUse, 1);

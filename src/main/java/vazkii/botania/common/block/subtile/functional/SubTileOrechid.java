@@ -29,6 +29,7 @@ import vazkii.botania.api.subtile.SubTileFunctional;
 import vazkii.botania.common.Botania;
 import vazkii.botania.common.core.handler.ConfigHandler;
 import vazkii.botania.common.lexicon.LexiconData;
+import vazkii.botania.common.world.WorldTypeSkyblock;
 
 public class SubTileOrechid extends SubTileFunctional {
 
@@ -129,11 +130,11 @@ public class SubTileOrechid extends SubTileFunctional {
 	}
 
 	public int getCost() {
-		return Botania.gardenOfGlassLoaded ? COST_GOG : COST;
+		return WorldTypeSkyblock.isWorldSkyblock(supertile.getWorldObj()) ? COST_GOG : COST;
 	}
 
 	public int getDelay() {
-		return Botania.gardenOfGlassLoaded ? DELAY_GOG : DELAY;
+		return WorldTypeSkyblock.isWorldSkyblock(supertile.getWorldObj()) ? DELAY_GOG : DELAY;
 	}
 
 	@Override

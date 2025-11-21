@@ -28,6 +28,7 @@ public final class ModAchievements {
 	public static AchievementPage botaniaPage;
 	public static int pageIndex;
 
+	public static Achievement floralFertilizerUse;
 	public static Achievement flowerPickup;
 	public static Achievement lexiconUse;
 	public static Achievement daybloomPickup;
@@ -89,9 +90,10 @@ public final class ModAchievements {
 	public static Achievement desuGun;
 
 	public static void init() {
+		//floralFertilizerUse = new AchievementMod("floralFertilizerUse", -1, 4, new ItemStack(ModItems.fertilizer), null);
 		flowerPickup = new AchievementMod(LibAchievementNames.FLOWER_PICKUP, 0, 4, new ItemStack(ModBlocks.flower, 1, 6), null);
-		lexiconUse = new AchievementMod(LibAchievementNames.LEXICON_USE, 1, 5, ModItems.lexicon, flowerPickup);
-		daybloomPickup = new AchievementMod(LibAchievementNames.DAYBLOOM_PICKUP, 3, 5, ItemBlockSpecialFlower.ofType(LibBlockNames.SUBTILE_DAYBLOOM), lexiconUse);
+		//lexiconUse = new AchievementMod(LibAchievementNames.LEXICON_USE, 1, 5, ModItems.lexicon, flowerPickup);
+		daybloomPickup = new AchievementMod(LibAchievementNames.DAYBLOOM_PICKUP, 3, 5, ItemBlockSpecialFlower.ofType(LibBlockNames.SUBTILE_DAYBLOOM), flowerPickup);
 		cacophoniumCraft = new AchievementMod(LibAchievementNames.CACOPHONIUM_CRAFT, -1, 2, ModItems.cacophonium, flowerPickup);
 		manaPoolPickup = new AchievementMod(LibAchievementNames.MANA_POOL_PICKUP, 3, 2, ModBlocks.pool, daybloomPickup);
 
