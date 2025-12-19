@@ -75,6 +75,27 @@ public class RenderTileFloatingFlower extends TileEntitySpecialRenderer {
 		GL11.glScalef(0.5F, 0.5F, 0.5F);
 		ItemRenderer.renderItemIn2D(Tessellator.instance, f1, f2, f, f3, icon.getIconWidth(), icon.getIconHeight(), 1F / 32F);
 		GL11.glColor3f(1F, 1F, 1F);
+		/*GL11.glPopMatrix();
+
+		GL11.glPushMatrix();
+		GL11.glColor4f(1F, 1F, 1F, 1F);
+		GL11.glTranslated(x, y, z);
+
+		GL11.glTranslatef(0.5F, 0F, 0.5F);
+		GL11.glRotatef(90F, 0F, 1F, 0F);
+		GL11.glRotatef(-((float) worldTime * 0.5F), 0F, 1F, 0F);
+		GL11.glTranslatef(-0.5F, 0F, -0.5F);
+
+		if(tileEntity.getWorldObj() != null) {
+			//GL11.glTranslatef(0F, (float) Math.sin(worldTime * 0.05F) * 0.1F, 0F);
+			//GL11.glRotatef(4F * (float) Math.sin(worldTime * 0.04F), 1F, 0F, 0F);
+		}
+
+		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+		GL11.glTranslatef(0.6F + 2/32F, 0.0F, 0.2F + 2/32F);
+		GL11.glScalef(0.5F, 0.5F, 0.5F);
+		ItemRenderer.renderItemIn2D(Tessellator.instance, f1, f2, f, f3, icon.getIconWidth(), icon.getIconHeight(), *//*1F / 32F*//* 0.0001F);
+		GL11.glColor3f(1F, 1F, 1F);*/
 		GL11.glPopMatrix();
 	}
 

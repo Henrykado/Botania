@@ -48,19 +48,22 @@ public class TileHourglass extends TileSimpleInventory {
 	public void updateEntity() {
 		super.updateEntity();
 
-		boolean redstone = false;
-		for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-			int redstoneSide = this.worldObj.getIndirectPowerLevelTo(
-					this.xCoord + dir.offsetX,
-					this.yCoord + dir.offsetY,
-					this.zCoord + dir.offsetZ,
-					dir.ordinal());
-			if (redstoneSide > 0) {
-				redstone = true;
-				break;
+		if (!flip) {
+			boolean redstone = false;
+			for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
+				int redstoneSide = this.worldObj.getIndirectPowerLevelTo(
+						this.xCoord + dir.offsetX,
+						this.yCoord + dir.offsetY,
+						this.zCoord + dir.offsetZ,
+						dir.ordinal());
+				if (redstoneSide > 0) {
+					redstone = true;
+					break;
+				}
 			}
+			move = !redstone;
+			time = redstone ? 0 : time;
 		}
-		move = !redstone;
 
 		int totalTime = getTotalTime();
 		if(totalTime > 0) {

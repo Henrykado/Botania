@@ -224,6 +224,9 @@ public final class BotaniaCreativeTab extends CreativeTabs {
 		}
 
 		addItem(ModItems.baubleBox);
+		addItem(ModItems.dodgeRing);
+		addItem(ModItems.invisibilityCloak);
+		addItem(ModItems.cloudPendant);
 		addItem(ModItems.tinyPlanet);
 		addBlock(ModBlocks.tinyPlanet);
 		addItem(ModItems.manaRing);

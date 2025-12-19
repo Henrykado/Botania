@@ -512,6 +512,9 @@ public final class BotaniaAPI {
 		RecipeMiniFlower recipe = new RecipeMiniFlower(key, original, 2500);
 		manaInfusionRecipes.add(recipe);
 		miniFlowerRecipes.add(recipe);
+
+		RecipeMiniFlower recipeReversal = new RecipeMiniFlower(original, key, 500);
+		manaInfusionRecipes.add(recipeReversal);
 		return recipe;
 	}
 

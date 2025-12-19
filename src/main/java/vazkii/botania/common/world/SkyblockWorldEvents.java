@@ -42,6 +42,7 @@ import vazkii.botania.common.Botania;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.block.tile.TileManaFlame;
 import vazkii.botania.common.crafting.ModCraftingRecipes;
+import vazkii.botania.common.crafting.ModManaAlchemyRecipes;
 import vazkii.botania.common.crafting.ModManaInfusionRecipes;
 import vazkii.botania.common.crafting.ModPetalRecipes;
 import vazkii.botania.common.item.ModItems;
@@ -190,6 +191,17 @@ public final class SkyblockWorldEvents {
 		removeEntry(LexiconData.cocoon);
 
 
+		if (ModManaAlchemyRecipes.prismarineRecipe != null)
+			BotaniaAPI.manaInfusionRecipes.remove(ModManaAlchemyRecipes.prismarineRecipe);
+
+		removeRecipe(ModCraftingRecipes.recipePrismarine);
+		removeRecipe(ModCraftingRecipes.recipePrismarineBrick);
+		removeRecipe(ModCraftingRecipes.recipeDarkPrismarine);
+		removeRecipe(ModCraftingRecipes.recipeSeaLamp);
+
+		removeEntry(LexiconData.prismarine);
+
+
 		if (isWorldSkyblock) {
 			// Mana Spreader
 			for (int i = 0; i < 16; i++) {
@@ -257,6 +269,45 @@ public final class SkyblockWorldEvents {
 			LexiconData.cocoon = new BLexiconEntry(LibLexicon.DEVICE_COCOON, BotaniaAPI.categoryDevices);
 			LexiconData.cocoon.setLexiconPages(new PageText("0"), new PageText("1"),
 					new PageCraftingRecipe("2", ModCraftingRecipes.recipeCocoon));
+
+
+			// Prismarine Recipe
+			addShapedOreDictRecipe(new ItemStack(ModBlocks.prismarine, 1, 0),
+					" S ", "SBS", " S ",
+					'S', LibOreDict.PRISMARINE_SHARD,
+					'B', "cobblestone");
+			ModCraftingRecipes.recipePrismarine = BotaniaAPI.getLatestAddedRecipe();
+
+			// Prismarine Brick Recipe
+			addShapedOreDictRecipe(new ItemStack(ModBlocks.prismarine, 1, 1),
+					" S ", "SBS", " S ",
+					'S', LibOreDict.PRISMARINE_SHARD,
+					'B', new ItemStack(Blocks.stonebrick));
+			ModCraftingRecipes.recipePrismarineBrick = BotaniaAPI.getLatestAddedRecipe();
+
+			// Dark Prismarine Recipe
+			addShapedOreDictRecipe(new ItemStack(ModBlocks.prismarine, 1, 2),
+					" S ", "SBS", " S ",
+					'S', LibOreDict.PRISMARINE_SHARD,
+					'B', new ItemStack(Blocks.nether_brick));
+			ModCraftingRecipes.recipeDarkPrismarine = BotaniaAPI.getLatestAddedRecipe();
+
+			// Sea Lantern Recipe
+			addShapedOreDictRecipe(new ItemStack(ModBlocks.seaLamp),
+					" S ", "SBS", " S ",
+					'S', LibOreDict.PRISMARINE_SHARD,
+					'B', "glowstone");
+			ModCraftingRecipes.recipeSeaLamp = BotaniaAPI.getLatestAddedRecipe();
+
+			ModManaAlchemyRecipes.prismarineRecipe = BotaniaAPI.registerManaAlchemyRecipe(new ItemStack(ModItems.manaResource, 1, 10), new ItemStack(Items.quartz), 200);
+
+			LexiconData.prismarine = new BLexiconEntry(LibLexicon.MISC_PRISMARINE, BotaniaAPI.categoryMisc);
+			LexiconData.prismarine.setLexiconPages(new PageText("0"), new PageText("1"),
+					new PageManaInfusionRecipe("2", ModManaAlchemyRecipes.prismarineRecipe),
+					new PageCraftingRecipe("3", ModCraftingRecipes.recipePrismarine),
+					new PageCraftingRecipe("4", ModCraftingRecipes.recipePrismarineBrick),
+					new PageCraftingRecipe("5", ModCraftingRecipes.recipeDarkPrismarine),
+					new PageCraftingRecipe("6", ModCraftingRecipes.recipeSeaLamp));
 		}
 		else {
 			// Mana Spreader
@@ -303,6 +354,16 @@ public final class SkyblockWorldEvents {
 			LexiconData.cocoon = new ALexiconEntry(LibLexicon.DEVICE_COCOON, BotaniaAPI.categoryDevices);
 			LexiconData.cocoon.setLexiconPages(new PageText("0"), new PageText("1"),
 					new PageCraftingRecipe("2", ModCraftingRecipes.recipeCocoon));
+
+
+			ModCraftingRecipes.recipePrismarine = null;
+			ModCraftingRecipes.recipePrismarineBrick = null;
+			ModCraftingRecipes.recipeDarkPrismarine = null;
+			ModCraftingRecipes.recipeSeaLamp = null;
+
+			ModManaAlchemyRecipes.prismarineRecipe = null;
+
+			LexiconData.prismarine = null;
 		}
 	}
 	

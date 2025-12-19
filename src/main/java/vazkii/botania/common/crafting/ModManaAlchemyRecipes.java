@@ -131,8 +131,6 @@ public final class ModManaAlchemyRecipes {
 
 		coarseDirtRecipe = BotaniaAPI.registerManaAlchemyRecipe(new ItemStack(Blocks.dirt, 1, 1), new ItemStack(Blocks.dirt), 120);
 
-		prismarineRecipe = BotaniaAPI.registerManaAlchemyRecipe(new ItemStack(ModItems.manaResource, 1, 10), new ItemStack(Items.quartz), 200);
-
 		if(ConfigHandler.stones18Enabled) {
 			stoneRecipes = new ArrayList<>();
 			stoneRecipes.add(BotaniaAPI.registerManaAlchemyRecipe(new ItemStack(ModFluffBlocks.stone), "stone", 200));

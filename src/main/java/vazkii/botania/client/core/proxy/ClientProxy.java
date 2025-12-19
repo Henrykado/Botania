@@ -170,6 +170,7 @@ import vazkii.botania.common.entity.EntityThornChakram;
 import vazkii.botania.common.entity.EntityVineBall;
 import vazkii.botania.common.item.ItemSextant.MultiblockSextant;
 import vazkii.botania.common.item.ModItems;
+import vazkii.botania.common.item.equipment.bauble.ItemFlightTiara;
 import vazkii.botania.common.item.equipment.bauble.ItemMonocle;
 import vazkii.botania.common.lexicon.LexiconData;
 import vazkii.botania.common.lib.LibObfuscation;
@@ -221,6 +222,8 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new SkyblockRenderEvents());
 		MinecraftForge.EVENT_BUS.register(new KeyHandler());
 		FMLCommonHandler.instance().bus().register(new CorporeaAutoCompleteHandler());
+
+		MinecraftForge.EVENT_BUS.register(ModItems.dodgeRing);
 
 		if(ConfigHandler.enableSeasonalFeatures) {
 			Calendar calendar = Calendar.getInstance();

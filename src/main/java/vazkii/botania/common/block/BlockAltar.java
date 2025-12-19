@@ -146,7 +146,7 @@ public class BlockAltar extends BlockModContainer<TileAltar> implements ILexicon
 				world.func_147453_f(x, y, z, this);
 
 				return true;
-			} else if(stack != null && stack.getItem() == Items.bucket && (tile.hasWater || tile.hasLava) && !WorldTypeSkyblock.isWorldSkyblock(par1World)) {
+			} else if(stack != null && stack.getItem() == Items.bucket && (tile.hasWater || tile.hasLava) && !WorldTypeSkyblock.isWorldSkyblock(world)) {
 				ItemStack bucket = tile.hasLava ? new ItemStack(Items.lava_bucket) : new ItemStack(Items.water_bucket);
 				if(stack.stackSize == 1)
 					player.inventory.setInventorySlotContents(player.inventory.currentItem, bucket);

@@ -255,6 +255,9 @@ public final class LexiconData {
 	public static LexiconEntry swapRing;
 	public static LexiconEntry speedUpBelt;
 	public static LexiconEntry baubleBox;
+	public static LexiconEntry dodgeRing;
+	public static LexiconEntry invisibilityCloak;
+	public static LexiconEntry cloudPendant;
 
 	public static LexiconEntry alfhomancyIntro;
 	public static LexiconEntry elvenMessage;
@@ -1238,6 +1241,15 @@ public final class LexiconData {
 		baubleBox.setLexiconPages(new PageText("0"), new PageCraftingRecipe("1", ModCraftingRecipes.recipeBaubleCase))
 				.setPriority();
 
+		dodgeRing = new RuneLexiconEntry("dodgeRing", categoryBaubles);
+		dodgeRing.setLexiconPages(new PageText("0"), new PageCraftingRecipe("1", ModCraftingRecipes.recipeDodgeRing));
+
+		invisibilityCloak = new RuneLexiconEntry("invisibilityCloak", categoryBaubles);
+		invisibilityCloak.setLexiconPages(new PageText("0"), new PageCraftingRecipe("1", ModCraftingRecipes.recipeInvisibilityCloak));
+
+		cloudPendant = new RuneLexiconEntry("dodgeRing", categoryBaubles);
+		cloudPendant.setLexiconPages(new PageText("0"), new PageCraftingRecipe("1", ModCraftingRecipes.recipeCloudPendant));
+
 		// ALFHOMANCY ENTRIES
 		alfhomancyIntro = new BLexiconEntry(LibLexicon.ALF_INTRO, categoryAlfhomancy);
 		alfhomancyIntro.setPriority()
@@ -1374,14 +1386,6 @@ public final class LexiconData {
 		shinyFlowers.setLexiconPages(new PageText("0"), new PageText("3"),
 				new PageCraftingRecipe("1", ModCraftingRecipes.recipesShinyFlowers),
 				new PageCraftingRecipe("2", ModCraftingRecipes.recipesMiniIsland));
-
-		prismarine = new BLexiconEntry(LibLexicon.MISC_PRISMARINE, categoryMisc);
-		prismarine.setLexiconPages(new PageText("0"), new PageText("1"),
-				new PageManaInfusionRecipe("2", ModManaAlchemyRecipes.prismarineRecipe),
-				new PageCraftingRecipe("3", ModCraftingRecipes.recipePrismarine),
-				new PageCraftingRecipe("4", ModCraftingRecipes.recipePrismarineBrick),
-				new PageCraftingRecipe("5", ModCraftingRecipes.recipeDarkPrismarine),
-				new PageCraftingRecipe("6", ModCraftingRecipes.recipeSeaLamp));
 
 		tinyPotato = new BLexiconEntry(LibLexicon.MISC_TINY_POTATO, categoryMisc);
 		tinyPotato.setLexiconPages(new PageText("0"),

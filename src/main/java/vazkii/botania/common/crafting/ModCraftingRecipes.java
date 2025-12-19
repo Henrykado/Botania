@@ -312,6 +312,9 @@ public final class ModCraftingRecipes {
 	public static List<IRecipe> recipesAltGrassSeeds;
 	public static IRecipe recipeSpeedUpBelt;
 	public static IRecipe recipeBaubleCase;
+	public static IRecipe recipeDodgeRing;
+	public static IRecipe recipeInvisibilityCloak;
+	public static IRecipe recipeCloudPendant;
 
 	// Garden of Glass
 	public static IRecipe recipeRootToSapling;
@@ -1095,34 +1098,6 @@ public final class ModCraftingRecipes {
 		// Moss Stone Recipe
 		addShapelessOreDictRecipe(new ItemStack(Blocks.mossy_cobblestone), "cobblestone", new ItemStack(ModItems.vineBall));
 		recipeMossStone = BotaniaAPI.getLatestAddedRecipe();
-
-		// Prismarine Recipe
-		addOreDictRecipe(new ItemStack(ModBlocks.prismarine, 1, 0),
-				" S ", "SBS", " S ",
-				'S', LibOreDict.PRISMARINE_SHARD,
-				'B', "cobblestone");
-		recipePrismarine = BotaniaAPI.getLatestAddedRecipe();
-
-		// Prismarine Brick Recipe
-		addOreDictRecipe(new ItemStack(ModBlocks.prismarine, 1, 1),
-				" S ", "SBS", " S ",
-				'S', LibOreDict.PRISMARINE_SHARD,
-				'B', new ItemStack(Blocks.stonebrick));
-		recipePrismarineBrick = BotaniaAPI.getLatestAddedRecipe();
-
-		// Dark Prismarine Recipe
-		addOreDictRecipe(new ItemStack(ModBlocks.prismarine, 1, 2),
-				" S ", "SBS", " S ",
-				'S', LibOreDict.PRISMARINE_SHARD,
-				'B', new ItemStack(Blocks.nether_brick));
-		recipeDarkPrismarine = BotaniaAPI.getLatestAddedRecipe();
-
-		// Sea Lantern Recipe
-		addOreDictRecipe(new ItemStack(ModBlocks.seaLamp),
-				" S ", "SBS", " S ",
-				'S', LibOreDict.PRISMARINE_SHARD,
-				'B', "glowstone");
-		recipeSeaLamp = BotaniaAPI.getLatestAddedRecipe();
 
 		// Influence Lens Recipe
 		addOreDictRecipe(new ItemStack(ModItems.lens, 1, 12),
@@ -2107,6 +2082,33 @@ public final class ModCraftingRecipes {
 				'C', new ItemStack(Blocks.chest),
 				'G', "ingotGold");
 		recipeBaubleCase = BotaniaAPI.getLatestAddedRecipe();
+
+		addOreDictRecipe(new ItemStack(ModItems.dodgeRing),
+				"EMA", "M M", "SM ",
+				'M', LibOreDict.MANA_STEEL,
+				'E', "gemEmerald",
+				'A', LibOreDict.RUNE[3],
+				'S', LibOreDict.RUNE[4]);
+		recipeDodgeRing = BotaniaAPI.getLatestAddedRecipe();
+		//[[<ore:gemEmerald>, <ore:ingotManasteel>, <ore:runeAirB>], [<ore:ingotManasteel>, null, <ore:ingotManasteel>], [<ore:runeSpringB>, <ore:ingotManasteel>, null]]
+
+		addOreDictRecipe(new ItemStack(ModItems.invisibilityCloak),
+				"PWP", "WAW", "WMW",
+				'P', "crystalPrismarine",
+				'W', new ItemStack(Blocks.wool),
+				'A', LibOreDict.RUNE[3],
+				'M', LibOreDict.MANA_PEARL);
+		recipeInvisibilityCloak = BotaniaAPI.getLatestAddedRecipe();
+		//[[<ore:crystalPrismarine>, <minecraft:wool>, <ore:crystalPrismarine>], [<minecraft:wool>, <ore:runeAirB>, <minecraft:wool>], [<minecraft:wool>, <ore:manaPearl>, <minecraft:wool>]]
+
+		addOreDictRecipe(new ItemStack(ModItems.cloudPendant),
+				"AM ", "M M", "SMR",
+				'A', LibOreDict.RUNE[6],
+				'R', LibOreDict.RUNE[3],
+				'M', LibOreDict.MANA_STRING,
+				'S', LibOreDict.MANA_STEEL);
+		recipeCloudPendant = BotaniaAPI.getLatestAddedRecipe();
+		//[[<Botania:rune:6>, <Botania:manaResource:16>, null], [<Botania:manaResource:16>, null, <Botania:manaResource:16>], [<Botania:manaResource>, <Botania:manaResource:16>, <Botania:rune:3>]]
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
