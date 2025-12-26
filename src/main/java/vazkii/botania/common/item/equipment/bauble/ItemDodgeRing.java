@@ -10,6 +10,7 @@
  */
 package vazkii.botania.common.item.equipment.bauble;
 
+import baubles.api.expanded.BaubleExpandedSlots;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -54,29 +55,12 @@ public class ItemDodgeRing extends ItemBauble {
         super("ring_dodge");
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onDrawScreenPre(RenderGameOverlayEvent.Pre event) {
-        Minecraft mc = Minecraft.getMinecraft();
-        Profiler profiler = mc.mcProfiler;
-
-        if (event.type == RenderGameOverlayEvent.ElementType.HEALTH) {
-            profiler.startSection("dodgeRing");
-            InventoryBaubles inv = PlayerHandler.getPlayerBaubles(mc.thePlayer);
-            ItemStack ring = inv.getStackInSlot(1);
-            if (ring == null || !(ring.getItem() instanceof ItemDodgeRing)) {
-                ring = inv.getStackInSlot(2);
-            }
-            if (ring != null && ring.getItem() instanceof ItemDodgeRing) {
-                ItemDodgeRing.renderHUD(event.resolution, mc.thePlayer, ring, event.partialTicks);
-            }
-            profiler.endSection();
-        }
-    }
-
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onKeyDown(InputEvent.KeyInputEvent event) {
         Minecraft mc = Minecraft.getMinecraft();
+
+        if (mc.thePlayer.getFoodStats().getFoodLevel() == 0) return;
 
         IInventory baublesInv = BaublesApi.getBaubles(mc.thePlayer);
         ItemStack ringStack = baublesInv.getStackInSlot(1);
@@ -91,12 +75,12 @@ public class ItemDodgeRing extends ItemBauble {
             int oldLeft = leftDown;
             leftDown = ClientTickHandler.ticksInGame;
 
-            if (leftDown - oldLeft < threshold) dodge(mc.thePlayer, true);
+            if (leftDown - oldLeft < threshold) dodge(mc.thePlayer, true, ringStack);
         } else if (mc.gameSettings.keyBindRight.isPressed() && !oldRightDown) {
             int oldRight = rightDown;
             rightDown = ClientTickHandler.ticksInGame;
 
-            if (rightDown - oldRight < threshold) dodge(mc.thePlayer, false);
+            if (rightDown - oldRight < threshold) dodge(mc.thePlayer, false, ringStack);
         }
 
         oldLeftDown = mc.gameSettings.keyBindLeft.isPressed();
@@ -109,7 +93,7 @@ public class ItemDodgeRing extends ItemBauble {
         if (cd > 0) ItemNBTHelper.setInt(stack, TAG_DODGE_COOLDOWN, cd - 1);
     }
 
-    private static void dodge(EntityPlayer player, boolean left) {
+    private static void dodge(EntityPlayer player, boolean left, ItemStack stack) {
         if (player.capabilities.isFlying || !player.onGround || player.moveForward > 0.2 || player.moveForward < -0.2)
             return;
 
@@ -124,6 +108,7 @@ public class ItemDodgeRing extends ItemBauble {
         player.motionY = sideVec.y;
         player.motionZ = sideVec.z;
 
+        ItemNBTHelper.setInt(stack, ItemDodgeRing.TAG_DODGE_COOLDOWN, ItemDodgeRing.MAX_CD);
         PacketHandler.INSTANCE.sendToServer(new PacketDodge());
     }
 
@@ -167,6 +152,7 @@ public class ItemDodgeRing extends ItemBauble {
                 player.worldObj.playSoundAtEntity(player, "botania:dash", 1.0F, 1.0F);
                 IInventory baublesInv = BaublesApi.getBaubles(player);
                 ItemStack ringStack = baublesInv.getStackInSlot(1);
+                player.addExhaustion(4.0F);
                 if (ringStack == null) {
                     ringStack = baublesInv.getStackInSlot(2);
                     if (ringStack == null) {
@@ -175,7 +161,6 @@ public class ItemDodgeRing extends ItemBauble {
                         return null;
                     }
                 }
-                player.addExhaustion(0.3F);
                 ItemNBTHelper.setInt(ringStack, ItemDodgeRing.TAG_DODGE_COOLDOWN, ItemDodgeRing.MAX_CD);
                 return null;
             }

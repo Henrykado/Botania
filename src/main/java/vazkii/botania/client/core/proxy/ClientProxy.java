@@ -224,6 +224,7 @@ public class ClientProxy extends CommonProxy {
 		FMLCommonHandler.instance().bus().register(new CorporeaAutoCompleteHandler());
 
 		MinecraftForge.EVENT_BUS.register(ModItems.dodgeRing);
+		FMLCommonHandler.instance().bus().register(ModItems.dodgeRing);
 
 		if(ConfigHandler.enableSeasonalFeatures) {
 			Calendar calendar = Calendar.getInstance();

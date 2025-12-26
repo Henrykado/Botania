@@ -12,6 +12,7 @@ package vazkii.botania.client.core.handler;
 
 import java.awt.Color;
 
+import baubles.common.container.InventoryBaubles;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.Minecraft;
@@ -62,6 +63,7 @@ import vazkii.botania.common.item.ItemCraftingHalo;
 import vazkii.botania.common.item.ItemSextant;
 import vazkii.botania.common.item.ItemTwigWand;
 import vazkii.botania.common.item.ModItems;
+import vazkii.botania.common.item.equipment.bauble.ItemDodgeRing;
 import vazkii.botania.common.item.equipment.bauble.ItemFlightTiara;
 import vazkii.botania.common.item.equipment.bauble.ItemMonocle;
 import vazkii.botania.common.lib.LibObfuscation;
@@ -86,6 +88,17 @@ public final class HUDHandler {
 				profiler.startSection("flugelTiara");
 				ItemFlightTiara.renderHUD(event.resolution, mc.thePlayer, amulet);
 				profiler.endSection();
+			}
+			profiler.endSection();
+
+			profiler.startSection("dodgeRing");
+			InventoryBaubles inv = PlayerHandler.getPlayerBaubles(mc.thePlayer);
+			ItemStack ring = inv.getStackInSlot(1);
+			if (ring == null || !(ring.getItem() instanceof ItemDodgeRing)) {
+				ring = inv.getStackInSlot(2);
+			}
+			if (ring != null && ring.getItem() instanceof ItemDodgeRing) {
+				ItemDodgeRing.renderHUD(event.resolution, mc.thePlayer, ring, event.partialTicks);
 			}
 			profiler.endSection();
 		}

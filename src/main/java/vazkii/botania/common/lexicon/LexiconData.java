@@ -1247,7 +1247,7 @@ public final class LexiconData {
 		invisibilityCloak = new RuneLexiconEntry("invisibilityCloak", categoryBaubles);
 		invisibilityCloak.setLexiconPages(new PageText("0"), new PageCraftingRecipe("1", ModCraftingRecipes.recipeInvisibilityCloak));
 
-		cloudPendant = new RuneLexiconEntry("dodgeRing", categoryBaubles);
+		cloudPendant = new RuneLexiconEntry("cloudPendant", categoryBaubles);
 		cloudPendant.setLexiconPages(new PageText("0"), new PageCraftingRecipe("1", ModCraftingRecipes.recipeCloudPendant));
 
 		// ALFHOMANCY ENTRIES
